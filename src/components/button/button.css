@@ -1,0 +1,14 @@
+
+.text {
+    color: green;
+    font-size: 30px;
+}
+
+.button {
+    background-color: #1812c8;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+}
