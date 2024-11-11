@@ -81,6 +81,9 @@ module.exports = {
         description: "Webpack App",
       },
       x: "Welcome to Webpack App!",
+      favicon: "./src/assets/images/img1.png",
+      minify: true,
+      // inject: 'body',
     })     
   ],
 };
