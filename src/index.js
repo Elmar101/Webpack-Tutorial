@@ -11,3 +11,12 @@ const heading = new Heading();
 heading.render();
 const button = new Button();
 button.render();
+
+if (process.env.NODE_ENV === 'production') {
+    console.log("Production rejimindəyik");
+} else {
+    console.log("development rejimindəyik");
+}
+
+// Qəsdən səhv:
+nonExistentFunction();

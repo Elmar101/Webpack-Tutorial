@@ -1,5 +1,3 @@
-const TerserWebpackPlugin = require("terser-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -8,9 +6,8 @@ const path = require("path");
 module.exports = {
   entry: "./src/index.js", 
   output: {
-    filename: "[name].[contenthash].js", 
+    filename: "bundle.js", 
     path: path.resolve(__dirname, "dist"), 
-    // publicPath: "dist/", 
     publicPath: "",
   },
   mode: "development",
@@ -20,19 +17,10 @@ module.exports = {
         test: /\.(png|jpg)$/,
         type: 'asset/resource',
       },
-      // {
-      //   test: /\.(png|jpg)$/,
-      //   type: 'asset/inline', 
-      // },
-      // {
-      //   test: /\.(png|jpg)$/,
-      //   type: 'asset', 
-      //   parser: {
-      //     dataUrlCondition: {
-      //       maxSize: 2 * 1024, 
-      //     },
-      //   }
-      // },
+      {
+        test: /\.(png|jpg)$/,
+        type: 'asset/inline', 
+      },
 
       {
         test: /\.txt$/,
@@ -40,13 +28,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        // use: ["style-loader", "css-loader"],
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.scss$/,
-        // use: ["style-loader", "css-loader", "sass-loader"], 
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader", "sass-loader"], 
       },
       {
         test: /\.js$/,
@@ -61,17 +47,11 @@ module.exports = {
       },
       {
         test: /\.hbs$/,
-        // use: [{loader:"handlebars-loader"}],
         use: ["handlebars-loader"],
       }
     ],
   },
   plugins: [
-    new TerserWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
-    }),
-    
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: "Webpack App",
@@ -83,7 +63,7 @@ module.exports = {
       x: "Welcome to Webpack App!",
       favicon: "./src/assets/images/img1.png",
       minify: true,
-      // inject: 'body',
+      inject: 'body',
     })     
   ],
 };
