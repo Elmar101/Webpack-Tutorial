@@ -66,4 +66,14 @@ module.exports = {
       inject: 'body',
     })     
   ],
+  devServer: {
+    port: 9000,
+    static: path.resolve(__dirname, 'dist'),
+    open: true, 
+    devMiddleware: { 
+        writeToDisk: true ,
+        index: "index.html"
+    },
+  }
+
 };
