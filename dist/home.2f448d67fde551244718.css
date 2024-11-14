@@ -1,0 +1,16 @@
+.div{background-color:hsla(0,0%,100%,.5294117647);color:#1812c8}
+
+.text {
+    color: green;
+    font-size: 30px;
+}
+
+.button {
+    background-color: #0fda7f92;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+}
+.h1{color:#210650;background-color:#54dec5}

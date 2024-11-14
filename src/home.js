@@ -21,4 +21,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Qəsdən səhv:
-nonExistentFunction();
+// nonExistentFunction();
