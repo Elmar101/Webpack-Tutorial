@@ -4,6 +4,7 @@ import _ from "lodash";
 
 const img = new Image();
 const heading = new Heading();
-
+//qesden sehf
+// console.log(hhh)
 heading.render(_.upperCase("image page"));
 img.render();
