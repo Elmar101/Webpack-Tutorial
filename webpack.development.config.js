@@ -4,13 +4,22 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.js", 
+  entry: {
+    home: "./src/home.js",
+    image: "./src/image.js"
+  }, 
   output: {
-    filename: "bundle.js", 
+    filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
     publicPath: "",
   },
   mode: "development",
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 3000
+    },
+  },
   module: {
     rules: [
       {
@@ -54,17 +63,31 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "Webpack App",
+      filename: "home.html",
+      chunks: ["home"],
+      title: "index app",
       template: "./src/index.hbs",
       meta:{
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "Webpack App",
+        description: "home app",
       },
       x: "Welcome to Webpack App!",
       favicon: "./src/assets/images/img1.png",
-      minify: true,
-      inject: 'body',
-    })     
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: "image.html",
+      chunks: ["image"],
+      title: "Image App",
+      template: "./src/index.hbs",
+      meta:{
+        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        description: "Image App",
+      },
+      x: "Welcome to Image App!",
+      favicon: "./src/assets/images/img1.png",
+      minify: false,
+    })    
   ],
   devServer: {
     port: 9000,
@@ -72,7 +95,6 @@ module.exports = {
     open: true, 
     devMiddleware: { 
         writeToDisk: true ,
-        index: "index.html"
     },
   }
 

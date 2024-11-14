@@ -5,13 +5,22 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.js", 
+  entry: {
+    home: "./src/home.js",
+    image: "./src/image.js",
+  }, 
   output: {
     filename: "[name].[contenthash].js", 
     path: path.resolve(__dirname, "dist"), 
     publicPath: "",
   },
   mode: "production",
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 3000
+    },
+  },
   module: {
     rules: [
       {
@@ -60,15 +69,30 @@ module.exports = {
     
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "Webpack App",
+      filename: "home.html",
+      chunks: ["home"],
+      title: "home app",
       template: "./src/index.hbs",
       meta:{
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "Webpack App",
+        description: "home page",
       },
       x: "Welcome to Webpack App!",
       favicon: "./src/assets/images/img1.png",
-      minify: true,
-    })     
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: "image.html",
+      chunks: ["image"],
+      title: "Image App",
+      template: "./src/index.hbs",
+      meta:{
+        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        description: "Image App",
+      },
+      x: "Welcome to Image App!",
+      favicon: "./src/assets/images/img1.png",
+      minify: false,
+    })       
   ],
 };
