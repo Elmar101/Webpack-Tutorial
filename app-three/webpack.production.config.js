@@ -6,12 +6,11 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const path = require("path");
 
 module.exports = {
-  entry: "./src/image.js", 
+  entry: "./src/main.js", 
   output: {
     filename: "[name].[contenthash].js", 
     path: path.resolve(__dirname, "dist"), 
-    // publicPath: "/static/",
-     publicPath: "http://localhost:9002/"
+     publicPath: "http://localhost:9003/"
   },
   mode: "production",
   optimization: {
@@ -52,7 +51,6 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-proposal-class-properties"],
           },
         },
       },
@@ -69,26 +67,22 @@ module.exports = {
     
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "image.html",
-      title: "Image App",
+      filename: "image-caption.html",
+      title: "Image Caption App",
       template: "./src/index.hbs",
       meta:{
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
         description: "Image App",
       },
-      x: "Welcome to Image App!",
+      x: "Welcome to Image Caption Component from app three!",
       favicon: "./src/assets/images/img1.png",
       minify: false,
     }),
     new ModuleFederationPlugin({
-      name: "appTwo",
+      name: "appThree",
       filename: "remoteEntry.js",
-      remotes: {
-        appOne: "appOne@http://localhost:9001/remoteEntry.js",
-        appThree: "appThree@http://localhost:9003/remoteEntry.js",
-      },
       exposes: {
-        "./ImagePage": "./src/pages/image-page/index.js",
+        "./ImageCaption": "./src/components/image-caption/index.js",
       }
     })          
   ],

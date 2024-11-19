@@ -1,0 +1,13 @@
+$text-color: #555;
+$text-size: 16px;
+$font-family: Arial, sans-serif;
+$background-color: #81b0a1;
+$border-color: #710910c8;
+
+.div {
+    color: $text-color;
+    font-size: $text-size;
+    font-family: $font-family;
+    background-color: $background-color;
+    border-left: 12px solid $border-color;
+}

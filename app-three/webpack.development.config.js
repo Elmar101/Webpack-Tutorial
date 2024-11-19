@@ -5,29 +5,14 @@ const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlug
 const path = require("path");
 
 module.exports = {
-  entry: {
-    image: "./src/image.js"
-  }, 
+  entry: "./src/main.js", 
   output: {
     filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
-    // publicPath: "",
-    publicPath: "http://localhost:9002/"
+    publicPath: "http://localhost:9003/"
   },
   mode: "development",
-  // optimization: {
-  //   runtimeChunk: 'single',
-  //   splitChunks: {
-  //     chunks: "all",
-  //     minSize: 3000,
-  //     cacheGroups: {
-  //       vendor: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         name: module => (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/) || [])[1]
-  //       }
-  //     }
-  //   },
-  // },
+
   module: {
     rules: [
       {
@@ -71,36 +56,32 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "image.html",
-      title: "Image App",
+      filename: "image-caption.html",
+      title: "Image Caption App",
       template: "./src/index.hbs",
       meta:{
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "Image App",
+        description: "Image Caption App",
       },
-      x: "Welcome to Image App!",
+      x: "Welcome to Image Caption App!",
       favicon: "./src/assets/images/img1.png",
       minify: false,
     }),
     new ModuleFederationPlugin({
-      name: "appTwo",
-      filename: "remoteEntry.js", 
-      remotes: {
-        appOne: "appOne@http://localhost:9001/remoteEntry.js",
-        appThree: "appThree@http://localhost:9003/remoteEntry.js",
-      },
+      name: "appThree",
+      filename: "remoteEntry.js",
       exposes: {
-        "./ImagePage": "./src/pages/image-page/index.js",
+        "./ImageCaption": "./src/components/image-caption/index.js",
       }
     })    
   ],
   devServer: {
-    port: 9002,
+    port: 9003,
     static: path.resolve(__dirname, 'dist'),
     open: true, 
     devMiddleware: { 
         writeToDisk: true ,
-        index: "image.html",
+        index: "image-caption.html",
     },
   }
 
