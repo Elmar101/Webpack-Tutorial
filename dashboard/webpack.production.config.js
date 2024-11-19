@@ -6,21 +6,20 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const path = require("path");
 
 module.exports = {
-  entry: "./src/image.js", 
+  entry: "./src/dashboard.js", 
   output: {
     filename: "[name].[contenthash].js", 
     path: path.resolve(__dirname, "dist"), 
-    // publicPath: "/static/",
-     publicPath: "http://localhost:9002/"
+    publicPath: "http://localhost:9000"
   },
   mode: "production",
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      minSize: 3000,
-      automaticNameDelimiter: "_",
-    },
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: "all",
+  //     minSize: 3000,
+  //     automaticNameDelimiter: "_",
+  //   },
+  // },
   module: {
     rules: [
       {
@@ -69,26 +68,15 @@ module.exports = {
     
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "image.html",
-      title: "Image App",
-      template: "./src/index.hbs",
-      meta:{
-        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "Image App",
-      },
-      x: "Welcome to Image App!",
-      favicon: "./src/assets/images/img1.png",
-      minify: false,
+      filename: "dashboard.html",
+      title: "Dashboard app"
     }),
     new ModuleFederationPlugin({
-      name: "appTwo",
-      filename: "remoteEntry.js",
+      name: "dashboard",
       remotes: {
         appOne: "appOne@http://localhost:9001/remoteEntry.js",
-      },
-      exposes: {
-        "./ImagePage": "./src/pages/image-page/index.js",
+        appTwo: "appTwo@http://localhost:9002/remoteEntry.js",
       }
-    })          
+    })   
   ],
 };
