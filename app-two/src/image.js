@@ -8,3 +8,9 @@ const heading = new Heading();
 // console.log(hhh)
 heading.render(_.upperCase("image page"));
 img.render();
+
+import('appOne/Button').then(module => {
+    const Button = module.Button;
+    const button = new Button();
+    button.render();
+}).catch(err => console.error(err));

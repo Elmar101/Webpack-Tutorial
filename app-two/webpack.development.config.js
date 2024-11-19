@@ -1,36 +1,41 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlugin;
 
 const path = require("path");
 
 module.exports = {
   entry: {
-    home: "./src/home.js",
-    image: "./src/image.js",
+    image: "./src/image.js"
   }, 
   output: {
-    filename: "[name].[contenthash].js", 
+    filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
-    publicPath: "/static/",
+    publicPath: "",
   },
-  mode: "production",
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      minSize: 3000
-    },
-  },
+  mode: "development",
+  // optimization: {
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     chunks: "all",
+  //     minSize: 3000,
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: module => (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/) || [])[1]
+  //       }
+  //     }
+  //   },
+  // },
   module: {
     rules: [
       {
         test: /\.(png|jpg)$/,
-        type: 'asset', 
-        parser: {
-          dataUrlCondition: {
-            maxSize: 8 * 1024, 
-          },
-        }
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(png|jpg)$/,
+        type: 'asset/inline', 
       },
 
       {
@@ -39,11 +44,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader", "sass-loader"], 
       },
       {
         test: /\.js$/,
@@ -63,27 +68,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
-    }),
-    
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "home.html",
-      chunks: ["home"],
-      title: "home app",
-      template: "./src/index.hbs",
-      meta:{
-        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "home page",
-      },
-      x: "Welcome to Webpack App!",
-      favicon: "./src/assets/images/img1.png",
-      minify: false,
-    }),
-    new HtmlWebpackPlugin({
       filename: "image.html",
-      chunks: ["image"],
       title: "Image App",
       template: "./src/index.hbs",
       meta:{
@@ -93,6 +80,22 @@ module.exports = {
       x: "Welcome to Image App!",
       favicon: "./src/assets/images/img1.png",
       minify: false,
-    })       
+    }),
+    new ModuleFederationPlugin({
+      name: "appTwo",
+      remotes: {
+        appOne: "appOne@http://localhost:9001/remoteEntry.js",
+      }
+    })    
   ],
+  devServer: {
+    port: 9002,
+    static: path.resolve(__dirname, 'dist'),
+    open: true, 
+    devMiddleware: { 
+        writeToDisk: true ,
+        index: "image.html",
+    },
+  }
+
 };

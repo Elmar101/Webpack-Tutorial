@@ -1,25 +1,34 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const  ModuleFederationPlugin  = require("webpack").container.ModuleFederationPlugin;
 
 const path = require("path");
 
 module.exports = {
   entry: {
     home: "./src/home.js",
-    image: "./src/image.js"
   }, 
   output: {
     filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
-    publicPath: "/static/",
+    // publicPath: "/static/",
+    publicPath: "http://localhost:9001/"
   },
   mode: "development",
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      minSize: 3000
-    },
-  },
+  // optimization: {
+  //   runtimeChunk: "single",
+  //   splitChunks: {
+  //     chunks: "all",
+  //     minSize: 3000,
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: module => (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/) || [])[1]
+  //       }
+  //     }
+  //   },
+
+  // },
   module: {
     rules: [
       {
@@ -64,7 +73,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: "home.html",
-      chunks: ["home"],
       title: "index app",
       template: "./src/index.hbs",
       meta:{
@@ -75,26 +83,24 @@ module.exports = {
       favicon: "./src/assets/images/img1.png",
       minify: false,
     }),
-    new HtmlWebpackPlugin({
-      filename: "image.html",
-      chunks: ["image"],
-      title: "Image App",
-      template: "./src/index.hbs",
-      meta:{
-        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "Image App",
+    new ModuleFederationPlugin({
+      name: "appOne",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Button": "./src/components/button/button.js",
       },
-      x: "Welcome to Image App!",
-      favicon: "./src/assets/images/img1.png",
-      minify: false,
-    })    
+    })
   ],
   devServer: {
-    port: 9000,
+    port: 9001,
     static: path.resolve(__dirname, 'dist'),
     open: true, 
     devMiddleware: { 
         writeToDisk: true ,
+        index: "home.html"
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',  // Tüm kaynaklardan erişime izin verir
     },
   }
 
