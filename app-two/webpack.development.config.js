@@ -11,7 +11,8 @@ module.exports = {
   output: {
     filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
-    publicPath: "",
+    // publicPath: "",
+    publicPath: "http://localhost:9002/"
   },
   mode: "development",
   // optimization: {
@@ -83,8 +84,12 @@ module.exports = {
     }),
     new ModuleFederationPlugin({
       name: "appTwo",
+      filename: "remoteEntry.js", 
       remotes: {
         appOne: "appOne@http://localhost:9001/remoteEntry.js",
+      },
+      exposes: {
+        "./ImagePage": "./src/pages/image-page/index.js",
       }
     })    
   ],

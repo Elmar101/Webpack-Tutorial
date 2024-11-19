@@ -5,30 +5,13 @@ const  ModuleFederationPlugin  = require("webpack").container.ModuleFederationPl
 const path = require("path");
 
 module.exports = {
-  entry: {
-    home: "./src/home.js",
-  }, 
+  entry: "./src/dashboard.js", 
   output: {
     filename: "[name].js", 
     path: path.resolve(__dirname, "dist"), 
-    // publicPath: "/static/",
-    publicPath: "http://localhost:9001/"
+    publicPath: 'http://localhost:9000/'
   },
   mode: "development",
-  // optimization: {
-  //   runtimeChunk: "single",
-  //   splitChunks: {
-  //     chunks: "all",
-  //     minSize: 3000,
-  //     cacheGroups: {
-  //       vendor: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         name: module => (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/) || [])[1]
-  //       }
-  //     }
-  //   },
-
-  // },
   module: {
     rules: [
       {
@@ -72,24 +55,15 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "home.html",
-      title: "index app",
-      template: "./src/index.hbs",
-      meta:{
-        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        description: "home app",
-      },
-      x: "Welcome to Webpack App!",
-      favicon: "./src/assets/images/img1.png",
-      minify: false,
+      filename: "dashboard.html",
+      title: "Dashboard App"
     }),
     new ModuleFederationPlugin({
-      name: "appOne",
-      filename: "remoteEntry.js",
-      exposes: {
-        "./Button": "./src/components/button/button.js",
-        "./HomePage": "./src/pages/home-page/index.js",
-      },
+      name: "DashboardApp",
+      remotes: {
+        appOne: "appOne@http://localhost:9001/remoteEntry.js",
+        appTwo: "appTwo@http://localhost:9002/remoteEntry.js",
+      }
     })
   ],
   devServer: {
@@ -99,6 +73,9 @@ module.exports = {
     devMiddleware: { 
         writeToDisk: true ,
         index: "home.html"
+    },
+    historyApiFallback: {
+      index: "dasboard.html",
     },
     headers: {
       'Access-Control-Allow-Origin': '*',  // Tüm kaynaklardan erişime izin verir

@@ -84,6 +84,7 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./Button": "./src/components/button/button.js",
+        "./HomePage": "./src/pages/home-page/index.js",
       },
     })   
   ],
