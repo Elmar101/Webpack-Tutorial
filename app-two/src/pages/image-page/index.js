@@ -14,6 +14,12 @@ class ImagePage {
             const button = new Button();
             button.render();
         }).catch(err => console.error(err));
+
+        import('appThree/ImageCaption').then(module => {
+            const ImageCaption = module.ImageCaption;
+            const imageCaption = new ImageCaption();
+            imageCaption.render('Image Caption from app three!');
+        }).catch(err => console.error(err));
     }
 }
 
